@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}My Posts{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">My Posts</h1>
+        <a href="{% url 'blog:create_post' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">
+            Create New Post
+        </a>
+    </div>
+
+    {% if posts %}
+        <div class="space-y-6">
+            {% for post in posts %}
+                <article class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-2">
+                            <a href="{% url 'blog:post_detail' pk=post.pk %}" class="hover:text-blue-500">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+                        
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <span>{{ post.created_at|date:"F j, Y" }}</span>
+                            <span class="mx-2">•</span>
+                            <span class="{% if post.is_published %}text-green-500{% else %}text-yellow-500{% endif %}">
+                                {{ post.is_published|yesno:"Published,Draft" }}
+                            </span>
+                        </div>
+
+                        {% if post.content %}
+                            <p class="text-gray-600 mb-4">{{ post.content|truncatewords:50 }}</p>
+                        {% endif %}
+
+                        <div class="flex items-center space-x-4">
+                            <a href="{{ post.youtube_url }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                                View Original Video
+                            </a>
+                            <a href="{% url 'blog:post_detail' pk=post.pk %}" class="text-blue-500 hover:text-blue-600">
+                                Read More
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+            <p class="text-gray-500 mb-4">You haven't created any posts yet.</p>
+            <a href="{% url 'blog:create_post' %}" class="text-blue-500 hover:text-blue-600">
+                Create your first post
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

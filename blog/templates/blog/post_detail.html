@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <article class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6">
+            <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+            
+            <div class="flex items-center text-gray-500 text-sm mb-6">
+                <span>By {{ post.author.username }}</span>
+                <span class="mx-2">•</span>
+                <span>{{ post.created_at|date:"F j, Y" }}</span>
+                {% if post.updated_at != post.created_at %}
+                    <span class="mx-2">•</span>
+                    <span>Updated {{ post.updated_at|date:"F j, Y" }}</span>
+                {% endif %}
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Original Video</h2>
+                <a href="{{ post.youtube_url }}" target="_blank" class="text-blue-500 hover:text-blue-600">
+                    {{ post.youtube_url }}
+                </a>
+            </div>
+
+            {% if post.transcription %}
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-2">Video Transcription</h2>
+                    <div class="prose max-w-none">
+                        {{ post.transcription|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if post.content %}
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-2">Additional Content</h2>
+                    <div class="prose max-w-none">
+                        {{ post.content|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </article>
+</div>
+{% endblock %}
